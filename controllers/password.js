@@ -1,7 +1,5 @@
 const User = require('../models/users');
 const ForgotPasswords = require('../models/forgotpasswords');
-
-
 const Sib = require('sib-api-v3-sdk');
 const client = Sib.ApiClient.instance;
 client.authentications['api-key'].apiKey = process.env.SIB_API_KEY;
@@ -28,7 +26,6 @@ exports.resetpasswordform = async (req, res, nex) => {
 
 exports.requestresetpassword = async (req, res, nex) => {
     try {
-
         const { email } = req.body;
         const user = await User.findOne({
             where: {
@@ -58,7 +55,7 @@ exports.requestresetpassword = async (req, res, nex) => {
                     <title>Password Reset</title>
                 </head>
                 <body>
-                    <h1>Reset Chat-app password</h1>
+                    <h1>Reset ToDoList password</h1>
                     <p>Click the button below to reset your password:</p>
                     <button><a href="${process.env.WEBSITE}/password/reset/{{params.role}}">Reset Password</a></button>
                 </body>

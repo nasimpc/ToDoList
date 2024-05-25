@@ -3,18 +3,14 @@ const Tasks = require('../models/tasks');
 
 exports.addLists = async (req, res, next) => {
     try {
-
         const title = req.body.title;
         const description = req.body.description;
-
         const data = await req.user.createList({ title: title, description: description });
         res.status(201).json({ newListDetails: data });
     }
     catch (err) {
         console.log(err);
-        res.status(500).json({
-            error: err
-        })
+        res.status(500).json({ message: 'Interenal Server err' });
     }
 }
 exports.addTasks = async (req, res, next) => {
@@ -26,22 +22,19 @@ exports.addTasks = async (req, res, next) => {
     }
     catch (err) {
         console.log(err);
-        res.status(500).json({
-            error: err
-        })
+        res.status(500).json({ message: 'Interenal Server err' });
     }
 }
 
 exports.getLists = async (req, res, next) => {
     try {
         const uId = req.user.dataValues.id;
-        console.log(uId);
         const lists = await Lists.findAll({ where: { UserId: uId } });
         res.status(200).json({ allLists: lists });
     }
     catch (error) {
-        console.log('Get list is failing', JSON.stringify(error));
-        res.status(500).json({ error: error });
+        console.log(err);
+        res.status(500).json({ message: 'Interenal Server err' });
     }
 }
 exports.getTasks = async (req, res, next) => {
@@ -52,7 +45,7 @@ exports.getTasks = async (req, res, next) => {
     }
     catch (error) {
         console.log('Get task is failing', JSON.stringify(error));
-        res.status(500).json({ error: error });
+        res.status(500).json({ message: 'Interenal Server err' });
     }
 }
 

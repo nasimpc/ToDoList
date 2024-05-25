@@ -26,7 +26,7 @@ window.addEventListener("DOMContentLoaded", async () => {
         for (var j = 0; j < getTasks.data.allTasks.length; j++) {
             if (getTasks.data.allTasks[j].done) {
                 var div = document.createElement('div');
-                div.className = "card";
+                div.className = "card bg-secondary";
                 div.id = getTasks.data.allTasks[j].id;
                 div.appendChild(document.createTextNode(getTasks.data.allTasks[j].task));
 
@@ -62,8 +62,9 @@ window.addEventListener("DOMContentLoaded", async () => {
 
 
 function showNewListOnScreen(obj) {
-    var newText = document.createTextNode(obj['description']);
-    var img = document.createTextNode(obj['title']);
+    var description = document.createTextNode(obj['description']);
+    var title = document.createElement('h3');
+    title.innerHTML = obj['title'];
 
     var input = document.createElement('input');
     input.id = 'task';
@@ -76,14 +77,13 @@ function showNewListOnScreen(obj) {
     var b = document.querySelector('#b');
 
     var div0 = document.createElement('div');
-    div0.className = "card col-4 bg-primary-subtle";
+    div0.className = "card col-4 bg-info-subtle";
     var div = document.createElement('div');
     div.className = "card-body";
     div.id = obj.id;
 
-    div.appendChild(img);
-    div.appendChild(document.createElement("br"));
-    div.appendChild(newText);
+    div.appendChild(title);
+    div.appendChild(description);
     div.appendChild(input);
     div.appendChild(btn);
 
@@ -91,7 +91,6 @@ function showNewListOnScreen(obj) {
     deleteBtn.className = 'btn btn-sm btn-danger float-right delete_list';
     deleteBtn.appendChild(document.createTextNode('X'));
     div.appendChild(deleteBtn);
-
 
     div.appendChild(document.createElement("br"));
     div0.appendChild(div);
@@ -104,10 +103,7 @@ async function editItem(e) {
     if (e.target.classList.contains('add')) {
         var task = e.target.previousSibling.value;
         var listId = e.target.parentNode.id;
-        let data = {
-            task: task,
-            listId: listId,
-        }
+        let data = { task, listId }
         const token = localStorage.getItem('token')
         const taskDetails = await axios.post("../todo/add-task", data, { headers: { "Authorization": token } });
         var list = e.target.parentNode;
@@ -131,16 +127,14 @@ async function editItem(e) {
         list.appendChild(div);
     }
     else if (e.target.classList.contains('task_done')) {
-        const token = localStorage.getItem('token')
         var div = e.target.parentElement;
         e.target.parentElement.removeChild(e.target);
-        div.className = "card";
+        div.className = "card bg-secondary";
         var id = div.id;
         axios.post(`../todo/done-task/${id}`);
 
     }
     else if (e.target.classList.contains('delete_list')) {
-
 
         if (confirm('Are You Sure?')) {
             const token = localStorage.getItem('token')
@@ -151,7 +145,6 @@ async function editItem(e) {
         }
     }
     else if (e.target.classList.contains('delete_task')) {
-
 
         if (confirm('Are You Sure?')) {
             const token = localStorage.getItem('token')

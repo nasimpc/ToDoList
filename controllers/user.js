@@ -21,9 +21,8 @@ exports.addUser = async (req, res, nex) => {
 
     }
     catch (err) {
-        res.status(500).json({
-            err: err
-        })
+        console.log(err);
+        res.status(500).json({ message: 'Interenal Server err' });
     }
 }
 function isstringnotvalid(string) {

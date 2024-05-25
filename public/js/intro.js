@@ -33,10 +33,8 @@ async function forgetPass(e) {
         const data = {
             email: email,
         }
-
+        console.log('hi');
         const res = await axios.post('../password/forgotpassword', data);
-        console.log(res);
-
     }
     catch (err) {
         console.log(err)
@@ -63,7 +61,7 @@ async function signup(e) {
         window.location.href = "user"
     }
     catch (err) {
-        //console.log("hi1", err);
+
         confirm('User already exists!');
 
     }
