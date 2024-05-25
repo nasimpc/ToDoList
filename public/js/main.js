@@ -18,35 +18,25 @@ window.addEventListener("DOMContentLoaded", async () => {
     const token = localStorage.getItem('token');
     const getLists = await axios.get("../todo/get-lists", { headers: { "Authorization": token } })
 
-
     for (var i = 0; i < getLists.data.allLists.length; i++) {
         var list = showNewListOnScreen(getLists.data.allLists[i]);
-
         const getTasks = await axios.get(`../todo/get-tasks/${getLists.data.allLists[i].id}`, { headers: { "Authorization": token } });
         for (var j = 0; j < getTasks.data.allTasks.length; j++) {
+            var div = document.createElement('div');
+            div.id = getTasks.data.allTasks[j].id;
+            div.appendChild(document.createTextNode(getTasks.data.allTasks[j].task));
+
+            var deleteBtn = document.createElement('button');
+            deleteBtn.className = 'btn btn-sm btn-danger float-right delete_task';
+            deleteBtn.appendChild(document.createTextNode('X'));
+            div.appendChild(deleteBtn);
+
             if (getTasks.data.allTasks[j].done) {
-                var div = document.createElement('div');
                 div.className = "card bg-secondary";
-                div.id = getTasks.data.allTasks[j].id;
-                div.appendChild(document.createTextNode(getTasks.data.allTasks[j].task));
-
-                var deleteBtn = document.createElement('button');
-                deleteBtn.className = 'btn btn-sm btn-danger float-right delete_task';
-                deleteBtn.appendChild(document.createTextNode('X'));
-                div.appendChild(deleteBtn);
-
                 list.appendChild(div);
             }
             else {
-                var div = document.createElement('div');
                 div.className = "card bg-warning-subtle";
-                div.id = getTasks.data.allTasks[j].id;
-                div.appendChild(document.createTextNode(getTasks.data.allTasks[j].task));
-
-                var deleteBtn = document.createElement('button');
-                deleteBtn.className = 'btn btn-sm btn-danger float-right delete_task';
-                deleteBtn.appendChild(document.createTextNode('X'));
-                div.appendChild(deleteBtn);
 
                 var doneBtn = document.createElement('button');
                 doneBtn.className = 'btn btn-sm btn-success float-right task_done';

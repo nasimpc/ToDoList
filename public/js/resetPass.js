@@ -1,14 +1,11 @@
 async function resetPass(e) {
     const parts = window.location.href.split('/');
-    const lastPart = parts[parts.length - 1];
+    const resetid = parts[parts.length - 1];
     e.preventDefault();
     const password = e.target.password.value;
     const confirmPassword = e.target.confirmPassword.value;
     if (password == confirmPassword) {
-        const obj = {
-            resetid: lastPart,
-            password: password,
-        }
+        const obj = { resetid, password }
         try {
             let res = await axios.post("/password/reset", obj);
             alert(res.data.message)

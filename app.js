@@ -25,6 +25,7 @@ app.use('/todo', todoRoutes);
 app.use('/password', passwordRoutes);
 app.use(maninRoute);
 
+// defining databse relations
 Lists.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
 User.hasMany(Lists);
 Tasks.belongsTo(Lists, { constraints: true, onDelete: 'CASCADE' });

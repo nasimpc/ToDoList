@@ -20,25 +20,18 @@ async function login(e) {
     catch (err) {
         console.log(err)
         document.body.innerHTML += `<div style="color: red;">${err.response.data.message}</div>`;
-
     }
 }
-
 
 async function forgetPass(e) {
     e.preventDefault();
     const email = e.target.forgetEmail.value;
-
     try {
-        const data = {
-            email: email,
-        }
-        console.log('hi');
+        const data = { email }
         const res = await axios.post('../password/forgotpassword', data);
     }
     catch (err) {
         console.log(err)
-
     }
 
 }
@@ -61,9 +54,7 @@ async function signup(e) {
         window.location.href = "user"
     }
     catch (err) {
-
-        confirm('User already exists!');
-
+        confirm(err);
     }
 }
 async function loginPage(e) {
