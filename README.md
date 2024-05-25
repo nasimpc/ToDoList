@@ -3,20 +3,20 @@
 * step 1: download from git repo
 * step 2: npm install
 * step 3: .env file creating (example model):
-"""PORT='3000'
-JWT_SECRET_KEY='secretkey'
-SIB_API_KEY ='hlkasdfjlkasdfjhalksdfjhlaksdfjaklsdfhjaklsdfjhlkasdfhjkl'
+* PORT='3000'
+* JWT_SECRET_KEY='secretkey'
+* SIB_API_KEY ='hlkasdfjlkasdfjhalksdfjhlaksdfjaklsdfhjaklsdfjhlkasdfhjkl'
 
-WEBSITE="http://localhost:3000"
-DATABASE_NAME='todo'
-DATABASE_USERNAME='root'
-DATABASE_PASSWORD='*******'
-DATABASE_DIALECT='mysql'
-DATABASE_HOST='localhost'"""
+* WEBSITE="http://localhost:3000"
+* DATABASE_NAME='todo'
+* DATABASE_USERNAME='root'
+* DATABASE_PASSWORD='*******'
+* DATABASE_DIALECT='mysql'
+* DATABASE_HOST='localhost'"""
 
 * step 4: npm start
 * step 5: url to start the web application eg: http://localhost:3000(port number)/
-Thank you for using ToDoList. for any futher enquery and support, email: nasimpcm@gmail.com
+* Thank you for using ToDoList. for any futher enquery and support, email: nasimpcm@gmail.com
 
 ## Purpose
 A simple web service that allows users to create and manage to-do lists.
