@@ -1,7 +1,6 @@
 //Starting of app.js file
 const express = require('express');
 require('dotenv').config();
-const bodyParser = require('body-parser');
 const sequelize = require('./util/database');
 
 const PORT = process.env.PORT;
@@ -17,7 +16,7 @@ const passwordRoutes = require('./routes/password');
 const todoRoutes = require('./routes/todo');
 
 const app = express();
-app.use(bodyParser.json({ extended: false }));
+app.use(express.json());
 app.use(express.static('public'));
 
 app.use('/user', userRoute);
@@ -26,11 +25,11 @@ app.use('/password', passwordRoutes);
 app.use(maninRoute);
 
 // defining databse relations
-Lists.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
+Lists.belongsTo(User, { constraints: true });
 User.hasMany(Lists);
 Tasks.belongsTo(Lists, { constraints: true, onDelete: 'CASCADE' });
 Lists.hasMany(Tasks);
-Forgotpasswords.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
+Forgotpasswords.belongsTo(User, { constraints: true });
 User.hasMany(Forgotpasswords);
 
 async function initiate() {
@@ -44,3 +43,6 @@ async function initiate() {
     }
 }
 initiate();
+
+
+

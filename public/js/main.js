@@ -10,6 +10,7 @@ async function saveToStorage(e) {
         title: title,
         description: description,
     }
+    todo_form.reset();
     const token = localStorage.getItem('token')
     const listDetails = await axios.post("../todo/add-list", data, { headers: { "Authorization": token } })
     showNewListOnScreen(listDetails.data.newListDetails);

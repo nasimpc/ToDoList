@@ -44,7 +44,7 @@ exports.getTasks = async (req, res, next) => {
         res.status(200).json({ allTasks: tasks });
     }
     catch (error) {
-        console.log('Get task is failing', JSON.stringify(error));
+        console.log('Get task is failing', error);
         res.status(500).json({ message: 'Interenal Server err' });
     }
 }
@@ -53,7 +53,6 @@ exports.deleteLists = async (req, res) => {
     try {
         const listId = req.params.listId;
         await Lists.destroy({ where: { id: listId } });
-        await Tasks.destroy({ where: { listId: listId } });
         res.sendStatus(200);
     }
     catch (err) {

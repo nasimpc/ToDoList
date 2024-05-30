@@ -1,16 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const todoController = require('../controllers/todo');
-const userauthentication = require('../middleware/authentication');
+const userAuthentication = require('../middleware/authentication');
 
-router.post('/add-list', userauthentication.authenticate, todoController.addLists);
-router.post('/add-task', userauthentication.authenticate, todoController.addTasks);
+router.post('/add-list', userAuthentication.authenticate, todoController.addLists);
+router.post('/add-task', userAuthentication.authenticate, todoController.addTasks);
 
-router.get('/get-lists', userauthentication.authenticate, todoController.getLists);
-router.get('/get-tasks/:listId', userauthentication.authenticate, todoController.getTasks);
+router.get('/get-lists', userAuthentication.authenticate, todoController.getLists);
+router.get('/get-tasks/:listId', userAuthentication.authenticate, todoController.getTasks);
 
-router.delete('/delete-list/:listId', userauthentication.authenticate, todoController.deleteLists);
-router.delete('/delete-task/:taskId', userauthentication.authenticate, todoController.deleteTask);
+router.delete('/delete-list/:listId', userAuthentication.authenticate, todoController.deleteLists);
+router.delete('/delete-task/:taskId', userAuthentication.authenticate, todoController.deleteTask);
 
 router.post('/done-task/:taskId', todoController.doneTask);
 

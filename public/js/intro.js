@@ -9,7 +9,7 @@ async function login(e) {
     }
     try {
         const response = await axios.post(`user/signin`, obj)
-        if (response.status === 200) {
+        if (response.status == 200) {
             localStorage.setItem('token', response.data.token);
             login_form.reset();
             alert(response.data.message)
