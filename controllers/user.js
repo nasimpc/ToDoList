@@ -13,16 +13,14 @@ function generateAccessToken(id, name) {
 
 exports.addUser = async (req, res, nex) => {
     try {
-
         const { name, email, password } = req.body;
         if (isStringNotValid(name) || isStringNotValid(email) || isStringNotValid(password)) {
             return res.status(400).json({ err: "Something is missing" })
         }
         const saltrounds = 5;
-        bcrypt.hash(password, saltrounds, async (err, hash) => {
-            const user = await User.create({ name, email, password: hash })
-            res.status(201).json({ message: 'Successfuly create new user', token: generateAccessToken(user.dataValues.id, user.dataValues.name) })
-        });
+        const hashedPassword = await bcrypt.hash(password, saltrounds);
+        const user = await User.create({ name, email, password: hashedPassword });
+        res.status(201).json({ message: 'Successfuly create new user', token: generateAccessToken(user.dataValues.id, user.dataValues.name) });
 
     }
     catch (err) {
