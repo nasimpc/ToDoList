@@ -14,4 +14,8 @@ router.delete('/delete-task/:taskId', userAuthentication.authenticate, todoContr
 
 router.post('/done-task/:taskId', todoController.doneTask);
 
+router.get('/get-list-users', todoController.getListUsers);
+
+router.post('/share-list', userAuthentication.authenticate, todoController.shareList);
+
 module.exports = router;

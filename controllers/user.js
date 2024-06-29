@@ -2,6 +2,7 @@ const User = require('../models/users');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const secretkey = process.env.JWT_SECRET_KEY;
+const { Op } = require('sequelize');
 
 function isStringNotValid(string) {
     let result = (string == undefined || string.length === 0) ? true : false;
@@ -59,5 +60,24 @@ exports.login = async (req, res) => {
 
     }
 }
+exports.getAlluser = async (req, res) => {
+    try {
+        const user = req.user;
+        const users = await User.findAll({
+            attributes: ['id', 'name'],
+            where: {
+                id: {
+                    [Op.not]: user.id
+                }
+            }
+        });
+        res.status(200).json({ users, message: "All users succesfully fetched" })
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ message: 'Internal Server err!' })
+    }
+}
+
 
 

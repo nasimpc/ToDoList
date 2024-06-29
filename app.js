@@ -6,8 +6,9 @@ const sequelize = require('./util/database');
 const PORT = process.env.PORT;
 
 const User = require('./models/users');
-const Forgotpasswords = require('./models/forgotpasswords');
+const ForgotPasswords = require('./models/forgotPasswords');
 const Lists = require('./models/lists');
+const ListUser = require('./models/listUsers');
 const Tasks = require('./models/tasks');
 
 const maninRoute = require('./routes/intro');
@@ -25,12 +26,15 @@ app.use('/password', passwordRoutes);
 app.use(maninRoute);
 
 // defining databse relations
-Lists.belongsTo(User, { constraints: true });
-User.hasMany(Lists);
-Tasks.belongsTo(Lists, { constraints: true, onDelete: 'CASCADE' });
-Lists.hasMany(Tasks);
-Forgotpasswords.belongsTo(User, { constraints: true });
-User.hasMany(Forgotpasswords);
+User.belongsToMany(Lists, { through: ListUser });
+Lists.belongsToMany(User, { through: ListUser });
+
+Lists.hasMany(Tasks, { constraints: true, onDelete: 'CASCADE' });
+Tasks.belongsTo(Lists);
+
+User.hasMany(ForgotPasswords, { constraints: true });
+ForgotPasswords.belongsTo(User);
+
 
 async function initiate() {
     try {

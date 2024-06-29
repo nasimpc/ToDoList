@@ -28,7 +28,7 @@ async function forgetPass(e) {
     const email = e.target.forgetEmail.value;
     try {
         const data = { email }
-        const res = await axios.post('../password/forgotpassword', data);
+        await axios.post('../password/forgotpassword', data);
     }
     catch (err) {
         console.log(err)

@@ -1,15 +1,13 @@
 var body = document.getElementById('a');
 body.addEventListener('click', editItem);
+form_submit.addEventListener('click', shareList);
+var currListId;
 
 async function saveToStorage(e) {
     e.preventDefault();
-    const title = event.target.title.value;
-    const description = event.target.description.value;
-
-    let data = {
-        title: title,
-        description: description,
-    }
+    const title = e.target.title.value;
+    const description = e.target.description.value;
+    let data = { title, description }
     todo_form.reset();
     const token = localStorage.getItem('token')
     const listDetails = await axios.post("../todo/add-list", data, { headers: { "Authorization": token } })
@@ -46,53 +44,35 @@ window.addEventListener("DOMContentLoaded", async () => {
 
                 list.appendChild(div);
             }
-
         }
     }
 })
 
 
 function showNewListOnScreen(obj) {
-    var description = document.createTextNode(obj['description']);
-    var title = document.createElement('h3');
-    title.innerHTML = obj['title'];
-
-    var input = document.createElement('input');
-    input.id = 'task';
-    input.className = "form-control";
-    var btn = document.createElement('button');
-    btn.className = 'btn btn-primary add';
-    btn.appendChild(document.createTextNode('create'));
-
     var a = document.querySelector('#a');
     var b = document.querySelector('#b');
 
     var div0 = document.createElement('div');
     div0.className = "card col-4 bg-info-subtle";
-    var div = document.createElement('div');
-    div.className = "card-body";
-    div.id = obj.id;
 
-    div.appendChild(title);
-    div.appendChild(description);
-    div.appendChild(input);
-    div.appendChild(btn);
-
-    var deleteBtn = document.createElement('button');
-    deleteBtn.className = 'btn btn-sm btn-danger float-right delete_list';
-    deleteBtn.appendChild(document.createTextNode('X'));
-    div.appendChild(deleteBtn);
-
-    div.appendChild(document.createElement("br"));
-    div0.appendChild(div);
+    div0.innerHTML = `<div class="card-body" id="${obj.id}"> 
+    <h3>${obj['title']}</h3>
+    ${obj['description']}
+    <button class="btn btn-primary share" data-bs-toggle="modal" data-bs-target="#group_model"
+    aria-controls="group_model" >Share</button>
+    <input id="task" class="form-control"></input>
+    <button class="btn btn-primary add">create</button>
+    <button class="btn btn-sm btn-danger float-right delete_list">X</button><br>
+    </div>`;
 
     a.insertBefore(div0, b);
-    return div
+    return div0.firstChild
 }
 // Remove item
 async function editItem(e) {
     if (e.target.classList.contains('add')) {
-        var task = e.target.previousSibling.value;
+        var task = e.target.previousSibling.previousSibling.value;
         var listId = e.target.parentNode.id;
         let data = { task, listId }
         const token = localStorage.getItem('token')
@@ -101,20 +81,12 @@ async function editItem(e) {
 
         var div = document.createElement('div');
         div.className = "card bg-warning-subtle";
-
         div.id = taskDetails.data.newTaskDetails.id;
-        div.appendChild(document.createTextNode(task));
+        div.innerHTML = `${task}
+        <button class="btn btn-sm btn-danger float-right delete_task">X</button>
+        <button class="btn btn-sm btn-success float-right task_done">Done</button>
+        `;
 
-        var deleteBtn = document.createElement('button');
-        deleteBtn.className = 'btn btn-sm btn-danger float-right delete_task';
-        deleteBtn.appendChild(document.createTextNode('X'));
-
-        var doneBtn = document.createElement('button');
-        doneBtn.className = 'btn btn-sm btn-success float-right task_done';
-        doneBtn.appendChild(document.createTextNode('Done'));
-        div.appendChild(doneBtn);
-
-        div.appendChild(deleteBtn);
         list.appendChild(div);
     }
     else if (e.target.classList.contains('task_done')) {
@@ -135,6 +107,38 @@ async function editItem(e) {
             axios.delete(`../todo/delete-list/${id}`, { headers: { "Authorization": token } });
         }
     }
+    else if (e.target.classList.contains('share')) {
+        try {
+            let status;
+            const token = localStorage.getItem('token')
+            var listId = e.target.parentNode.id;
+            currListId = listId;
+            user_list.parentElement.classList.remove('d-none');
+            const usersResponse = await axios.get('user/get-users', { headers: { "Authorization": token } });
+            const userApi = await axios(`todo/get-list-users?listId=${listId}`);
+            const listUsers = userApi.data.users;
+            const usersId = new Set(listUsers.map(item => item.id));
+            user_list.innerHTML = "";
+            const { users } = usersResponse.data;
+            users.forEach((user) => {
+                if (usersId.has(user.id)) { status = "checked" } else { status = "" }
+                user_list.innerHTML += `                                    
+                    <li class="list-group-item  d-flex  justify-content-between">
+                        <div class="d-flex  align-items-center justify-content-between">
+                            <img src="https://picsum.photos/seed/${Number(user.id) + 100}/200" alt="Profile Picture"
+                                class="rounded-circle me-3" style="width: 35px; height: 35px;">
+                            <h6><strong class="mb-1">${user.name}</strong></h6>
+                        </div>
+                        <input type="checkbox" class="form-check-inline" name="users" value="${user.id}" ${status}>
+                    </li>`
+            })
+
+
+        } catch (err) {
+            console.log(err);
+            alert(err.response.data.message);
+        }
+    }
     else if (e.target.classList.contains('delete_task')) {
 
         if (confirm('Are You Sure?')) {
@@ -147,3 +151,23 @@ async function editItem(e) {
     }
 
 }
+async function shareList(e) {
+    try {
+        const token = localStorage.getItem('token')
+        let listId = currListId;
+        e.preventDefault();
+        const sharedUsers = Array.from(user_list.querySelectorAll('input[name="users"]:checked'))
+            .map(checkbox => checkbox.value);
+        const data = { sharedUsers }
+        await axios.post(`todo/share-list?listId=${listId}`, data, { headers: { "Authorization": token } });
+        alert("List shared")
+        create_group_form.reset();
+        var myModalEl = document.getElementById('group_model');
+        var modal = bootstrap.Modal.getInstance(myModalEl)
+        modal.hide();
+    } catch (err) {
+        console.log(err);
+        alert(err.response.data.message);
+    }
+}
+

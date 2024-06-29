@@ -1,5 +1,6 @@
 const Lists = require('../models/lists');
 const Tasks = require('../models/tasks');
+const Users = require('../models/users');
 
 exports.addLists = async (req, res, next) => {
     try {
@@ -29,10 +30,12 @@ exports.addTasks = async (req, res, next) => {
 exports.getLists = async (req, res, next) => {
     try {
         const uId = req.user.dataValues.id;
-        const lists = await Lists.findAll({ where: { UserId: uId } });
+        const user = await Users.findOne({ where: { id: Number(uId) } });
+        const lists = await user.getLists();
+        //const lists = await Lists.findAll({ where: { UserId: uId } });
         res.status(200).json({ allLists: lists });
     }
-    catch (error) {
+    catch (err) {
         console.log(err);
         res.status(500).json({ message: 'Interenal Server err' });
     }
@@ -81,5 +84,42 @@ exports.doneTask = async (req, res) => {
     catch (err) {
         console.log(err);
         res.status(500).json(err);
+    }
+}
+
+exports.getListUsers = async (req, res) => {
+    try {
+        const { listId } = req.query;
+        const list = await Lists.findOne({ where: { id: Number(listId) } });
+        const allUsersData = await list.getUsers();
+        const users = allUsersData.map((ele) => {
+            return {
+                id: ele.id,
+                name: ele.name,
+            }
+        })
+
+        res.status(200).json({ users, message: "Group members name succesfully fetched" })
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ message: 'Internal Server err!' })
+    }
+}
+
+exports.shareList = async (req, res) => {
+    try {
+        const user = req.user;
+        const { listId } = req.query;
+        const list = await Lists.findOne({ where: { id: Number(listId) } });
+        const { sharedUsers } = req.body;
+        sharedUsers.push(user.id);
+        await list.setUsers(sharedUsers.map((ele) => {
+            return Number(ele)
+        }));
+        res.status(200).json({ list: list, message: "shared" })
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ message: 'Internal Server err!' })
     }
 }
