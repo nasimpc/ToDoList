@@ -32,6 +32,4 @@ User Registration and Login: Implemented user registration with a username and p
 ## Implemented Database Interaction:
 * Stored user information (username, hashed password) securely in a database.
 * Stored to-do lists and tasks in the database, associatted them with the respective user.
-## Additional Considerations:
-* Implemented basic error handling and informative messages to the user.
-* Included a README file with instructions on how to run the application.
+
