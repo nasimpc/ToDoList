@@ -29,6 +29,7 @@ User Registration and Login: Implemented user registration with a username and p
 * Add new tasks to their lists, including a description.
 * Able to mark tasks as completed.
 * Able to delete tasks and lists.
+* Instant sharing of to do task using web socket.
 ## Implemented Database Interaction:
 * Stored user information (username, hashed password) securely in a database.
 * Stored to-do lists and tasks in the database, associatted them with the respective user.
