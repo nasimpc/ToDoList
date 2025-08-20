@@ -1,4 +1,5 @@
-# To-Do List Web Service
+# CollabDo
+collaborative to-dos.
 ## How to Run
 * step 1: download from git repo
 * step 2: npm install
@@ -16,13 +17,10 @@
 
 * step 4: npm start
 * step 5: url to start the web application eg: http://localhost:3000(port number)/
-* Thank you for using ToDoList. for any futher enquery and support, email: nasimpcm@gmail.com
 
-## Purpose
-A simple web service that allows users to create and manage to-do lists.
 ## Functionality:
 User Registration and Login: Implemented user registration with a username and password. Implemented secure password hashing.
-## Implemented To-Do List features:
+## CollabDo features:
 * Implement role-based access control, where users can only edit their own lists and tasks.
 * Integrated a third-party API for additional features (email based forget password recovery)
 * New to-do lists with a title and description.
@@ -30,7 +28,7 @@ User Registration and Login: Implemented user registration with a username and p
 * Able to mark tasks as completed.
 * Able to delete tasks and lists.
 * Instant sharing of to do task using web socket.
-## Implemented Database Interaction:
+## Database Interaction:
 * Stored user information (username, hashed password) securely in a database.
 * Stored to-do lists and tasks in the database, associatted them with the respective user.
 
